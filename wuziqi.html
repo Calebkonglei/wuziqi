@@ -1,0 +1,100 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+	<title>五子棋</title>
+	<style type="text/css">
+
+      #canvas{
+      	display: block;
+         box-shadow: -2px -2px 2px #EFEFEF,5px 5px 5px #B9B9B9;
+         margin:20px auto;
+      }
+       div{
+           height:40px;
+           line-height: 40px;
+           padding:5px;
+           font-size: 2em;
+           border:1px solid black;
+           position: absolute;
+           top:50px;
+           left:20px;
+           cursor:pointer;
+
+       }
+        div:hover{
+            background-color: aqua;
+            color: aliceblue;
+
+        }
+	</style>
+</head>
+<body>
+<canvas id="canvas" width="600px" height="600px"></canvas>
+<div id="reset">重置棋盘</div>
+
+<script type="text/javascript">
+    var reset=document.getElementById("reset");
+    var color=true;
+    var chessarray=[];//用于记录已经放置棋子
+    //数组初始化
+    for(var i=0;i<15;i++){
+        chessarray[i]=[];
+        for(var j=0;j<15;j++){
+            chessarray[i][j]=0;
+        }
+    }
+    var canvas=document.getElementById('canvas');
+    var context=canvas.getContext('2d');
+   context.strokeStyle="#BFBFBF";
+
+   //绘制表格
+       for(var i=0;i<15;i++){
+           context.moveTo(20,20+i*40);
+           context.lineTo(580,20+i*40);
+           context.stroke();
+           context.moveTo(20+i*40,20);
+           context.lineTo(20+i*40,580);
+           context.stroke();
+       }
+  //绘制棋子
+   function drawchess(x,y,color){
+       context.beginPath();
+       context.arc(20+x*40,20+y*40,15,0,2*Math.PI,false);
+       context.closePath();
+       var gradient=context.createRadialGradient(20+x*40+4,20+y*40-4,12,20+x*40+4,20+y*40-4,0);
+       if(color) {
+           gradient.addColorStop(0, "#0A0A0A");
+           gradient.addColorStop(1, "#E1E1E1");
+       }else{
+           gradient.addColorStop(0, "#D1D1D1");
+           gradient.addColorStop(1, "#F9F9F9");
+       }
+       context.fillStyle=gradient;
+       context.fill();
+   }
+//点击画板下棋吧！
+canvas.onclick=function(e){
+    var x= e.offsetX;
+    var y= e.offsetY;
+    var i=Math.floor(x/40);
+    var j=Math.floor(y/40);
+    if(chessarray[i][j]==0){//判断当前位置是否有棋子
+        drawchess(i,j,color);
+        if(color){
+            chessarray[i][j]=1;
+        }else{
+            chessarray[i][j]=2;
+        }
+        color=!color;
+    }
+
+}
+//点击清空棋子
+    reset.onclick=function(){
+       confirm("确认清空棋盘？");
+        window.location.href="file:///E:/canvas/wuziqi.html";
+    }
+
+</script>
+</body>
+</html>
